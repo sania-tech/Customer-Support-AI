@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Box, Stack, TextField, Button } from "@mui/material";
 import { useState } from "react";
 
@@ -15,48 +15,45 @@ export default function Home() {
   const sendMessage = async () => {
     if (!message.trim()) return;
 
+    // Update UI with user's message
     setMessages((messages) => [
       ...messages,
       { role: 'user', content: message },
       { role: 'assistant', content: '' },
     ]);
 
-    setMessage(''); 
+    setMessage('');
 
     try {
+      // Send message to the API
       const response = await fetch('/api/chat', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([...messages, { role: 'user', content: message }]),
+        body: JSON.stringify({
+          messages: [...messages, { role: 'user', content: message }]
+        }),
       });
 
       if (!response.ok) throw new Error('Network response was not ok');
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
+      // Parse the response as JSON
+      const data = await response.json();
 
-      const processText = async () => {
-        const { done, value } = await reader.read();
-        if (done) return;
-
-        result += decoder.decode(value, { stream: true });
-
-        setMessages((prevMessages) => {
-          const newMessages = [...prevMessages];
-          newMessages[newMessages.length - 1].content = result;
-          return newMessages;
-        });
-
-        await processText();
-      };
-
-      await processText();
+      // Update UI with assistant's response
+      setMessages((prevMessages) => {
+        const newMessages = [...prevMessages];
+        newMessages[newMessages.length - 1].content = data.content;
+        return newMessages;
+      });
 
     } catch (error) {
       console.error('Error fetching chat response:', error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: 'assistant', content: 'Sorry, something went wrong.' }
+      ]);
     }
   };
 
@@ -114,5 +111,5 @@ export default function Home() {
         </Stack>
       </Stack>
     </Box>
-  )
+  );
 }
