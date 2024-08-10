@@ -1,6 +1,17 @@
 'use client';
-import { Box, Stack, TextField, Button } from "@mui/material";
+import { Box, Stack, TextField, Button, ThemeProvider, createTheme } from "@mui/material";
 import { useState } from "react";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#6C402E', // Brown color for the "Send" button
+    },
+    secondary: {
+      main: '#FFA07A', // Light orange color for the chatbot replies
+    },
+  },
+});
 
 export default function Home() {
   const [messages, setMessages] = useState([
@@ -58,61 +69,60 @@ export default function Home() {
   };
 
   return (
-    <Box
-      width="100vw"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      className="chatbot-background" // Apply the background class here
-    >
-      <Stack
-        direction="column"
-        width="600px"
-        height="700px"
-        border="1px solid black"
-        p={2}
-        spacing={2}
-        bgcolor="rgba(255, 255, 255, 0.8)" // Optional: Add a semi-transparent background to the chatbot box
-        borderRadius={16} // Optional: Add rounded corners
+    <ThemeProvider theme={theme}>
+      <Box
+        width="100vw"
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
       >
         <Stack
           direction="column"
+          width="600px"
+          height="700px"
+          border="1px solid black"
+          p={2}
           spacing={2}
-          flexGrow={1}
-          overflow="auto"
-          maxHeight="100%"
         >
-          {messages.map((msg, index) => (
-            <Box
-              key={index}
-              display='flex'
-              justifyContent={
-                msg.role === 'assistant' ? 'flex-start' : 'flex-end'
-              }
-            >
+          <Stack
+            direction="column"
+            spacing={2}
+            flexGrow={1}
+            overflow="auto"
+            maxHeight="100%"
+          >
+            {messages.map((msg, index) => (
               <Box
-                bgcolor={msg.role === 'assistant' ? 'primary.main' : 'secondary.main'}
-                color="white"
-                p={3}
-                borderRadius={16}
+                key={index}
+                display='flex'
+                justifyContent={
+                  msg.role === 'assistant' ? 'flex-start' : 'flex-end'
+                }
               >
-                {msg.content}
+                <Box
+                  bgcolor={msg.role === 'assistant' ? 'secondary.main' : 'primary.main'}
+                  color="white"
+                  p={3}
+                  borderRadius={16}
+                >
+                  {msg.content}
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))}
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <TextField
+              label="Message"
+              fullWidth
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <Button variant="contained" onClick={sendMessage}>Send</Button>
+          </Stack>
         </Stack>
-        <Stack direction="row" spacing={2}>
-          <TextField
-            label="Message"
-            fullWidth
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <Button variant="contained" onClick={sendMessage}>Send</Button>
-        </Stack>
-      </Stack>
-    </Box>
+      </Box>
+    </ThemeProvider>
   );
 }

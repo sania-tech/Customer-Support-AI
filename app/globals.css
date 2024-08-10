@@ -12,15 +12,9 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb)); /* Keep the original background or any default */
-}
-
-.chatbot-background {
-  background-image: url('https://i.pinimg.com/564x/6d/81/e7/6d81e7df501707a352c5467633f994fb.jpg');
+  background: url('https://i.pinimg.com/564x/6d/81/e7/6d81e7df501707a352c5467633f994fb.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
+  background-blend-mode: overlay;
+  background-color: rgba(255, 255, 255, 0.8); /* Optional, for a slight white overlay */
 }
-
 
