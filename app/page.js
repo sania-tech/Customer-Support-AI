@@ -65,6 +65,7 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      className="chatbot-background" // Apply the background class here
     >
       <Stack
         direction="column"
@@ -73,6 +74,8 @@ export default function Home() {
         border="1px solid black"
         p={2}
         spacing={2}
+        bgcolor="rgba(255, 255, 255, 0.8)" // Optional: Add a semi-transparent background to the chatbot box
+        borderRadius={16} // Optional: Add rounded corners
       >
         <Stack
           direction="column"
